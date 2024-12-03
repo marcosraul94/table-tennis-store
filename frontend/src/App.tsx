@@ -1,12 +1,14 @@
 import { Routes, Route } from "react-router";
 import Home from "@/pages/home";
-import Contact from "@/pages/contact";
+import Login from "@/pages/login";
+import Register from "@/pages/register";
 
 const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/contact" element={<Contact />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/login" element={<Register />} />
     </Routes>
   );
 };

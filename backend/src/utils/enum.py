@@ -11,3 +11,9 @@ class HttpMethod(Enum):
 class Stage(Enum):
     LOCAL = 'local'
     CLOUD = 'cloud'
+
+
+class HttpStatus(Enum):
+    OK = 200
+    NOT_FOUND = 404
+    INTERNAL_SERVER_ERROR = 500

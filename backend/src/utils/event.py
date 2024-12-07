@@ -14,6 +14,10 @@ class ApiGatewayEvent:
     @property
     def http_method(self) -> HttpMethod:
         return HttpMethod(self._event['requestContext']['http']['method'])
+    
+    @property
+    def route(self) -> str:
+        return ""
 
     @property
     def email(self) -> str:

@@ -18,11 +18,11 @@ module "api_gateway" {
 module "users_lambda" {
   source = "terraform-aws-modules/lambda/aws"
 
-  function_name = "users"
-  handler       = "app.users"
-  runtime       = "python3.13"
-  source_path   = "../backend"
-  publish       = false
+  function_name                     = "users"
+  handler                           = "app.users"
+  runtime                           = "python3.13"
+  source_path                       = "../backend"
+  publish                           = false
   cloudwatch_logs_retention_in_days = 7
 
   allowed_triggers = {

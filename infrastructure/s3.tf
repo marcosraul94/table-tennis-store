@@ -7,7 +7,7 @@ module "s3_bucket" {
   block_public_policy     = false
   ignore_public_acls      = false
   restrict_public_buckets = false
-  attach_policy = true
+  attach_policy           = true
 
   policy = jsonencode({
     Version = "2012-10-17",
@@ -22,19 +22,12 @@ module "s3_bucket" {
     ]
   })
 
+  website = {
+    index_document = "index.html"
+    error_document = "error.html"
+  }
+
   versioning = {
     enabled = false
-  }
-}
-
-resource "aws_s3_bucket_website_configuration" "website-configuration" {
-  bucket = module.s3_bucket.s3_bucket_id
-
-  index_document {
-    suffix = "index.html"
-  }
-
-  error_document {
-    key = "error.html"
   }
 }

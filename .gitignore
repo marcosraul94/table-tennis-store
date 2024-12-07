@@ -15,7 +15,7 @@ dist-ssr
 .terraform
 builds
 .aws-sam-iacs
-__pycache__
+__pycache__/
 
 # Editor directories and files
 .vscode/*

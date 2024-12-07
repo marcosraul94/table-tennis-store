@@ -7,6 +7,20 @@ module "s3_bucket" {
   block_public_policy     = false
   ignore_public_acls      = false
   restrict_public_buckets = false
+  attach_policy = true
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Sid       = "PublicReadGetObject",
+        Effect    = "Allow",
+        Principal = "*",
+        Action    = "s3:GetObject",
+        Resource  = "${module.s3_bucket.s3_bucket_arn}/*"
+      }
+    ]
+  })
 
   versioning = {
     enabled = false
@@ -23,21 +37,4 @@ resource "aws_s3_bucket_website_configuration" "website-configuration" {
   error_document {
     key = "error.html"
   }
-}
-
-resource "aws_s3_bucket_policy" "public_read_policy" {
-  bucket = module.s3_bucket.s3_bucket_id
-
-  policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [
-      {
-        Sid       = "PublicReadGetObject",
-        Effect    = "Allow",
-        Principal = "*",
-        Action    = "s3:GetObject",
-        Resource  = "${module.s3_bucket.s3_bucket_arn}/*"
-      }
-    ]
-  })
 }

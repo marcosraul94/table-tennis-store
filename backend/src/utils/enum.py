@@ -6,6 +6,7 @@ class HttpMethod(Enum):
     POST = 'post'
     DELETE = 'delete'
     PATCH = 'patch'
+    PUT = 'put'
 
 
 class Stage(Enum):

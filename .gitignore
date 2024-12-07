@@ -13,6 +13,8 @@ dist-ssr
 *.local
 .env
 .terraform
+builds
+.aws-sam-iacs
 
 # Editor directories and files
 .vscode/*

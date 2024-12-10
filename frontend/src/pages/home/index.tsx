@@ -3,7 +3,7 @@ import { AuthContext } from "@/contexts/auth";
 import { Link } from "react-router";
 
 const Page = () => {
-  const { email } = useContext(AuthContext);
+  const { email, signOut } = useContext(AuthContext);
 
   return (
     <div>
@@ -16,6 +16,7 @@ const Page = () => {
           <Link to="/sign-up"> Sign Up </Link>
         </li>
       </ul>
+      <div>{email && <button onClick={signOut}> Sign out </button>}</div>
     </div>
   );
 };

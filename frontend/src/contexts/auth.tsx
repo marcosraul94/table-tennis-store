@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const loadCachedUser = async () => {
+    const getLoggedUser = async () => {
       setIsLoading(true);
 
       try {
@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       }
     };
 
-    loadCachedUser();
+    getLoggedUser();
   }, []);
 
   const signOut = async () => {

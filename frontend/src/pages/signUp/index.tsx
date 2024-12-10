@@ -24,7 +24,7 @@ const Page = () => {
 
   return (
     <div>
-      Register
+      Sign up
       <div>
         email: <input type="email" value={email} onChange={handleEmailChange} />
       </div>

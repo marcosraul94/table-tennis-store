@@ -21,7 +21,7 @@ module "api_lambda" {
   function_name                           = "table_tennis_store_api"
   handler                                 = "app.users"
   runtime                                 = "python3.13"
-  source_path                             = "../backend"
+  source_path                             = "../backend/api"
   publish                                 = false
   cloudwatch_logs_retention_in_days       = 7
   create_current_version_allowed_triggers = false

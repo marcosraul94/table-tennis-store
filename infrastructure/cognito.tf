@@ -22,7 +22,7 @@ module "pre_sign_up_lambda" {
   function_name                           = "pre_sign_up_cognito"
   handler                                 = "preSignUp.handler"
   runtime                                 = "nodejs22.x"
-  source_path                             = "../cognito"
+  source_path                             = "../backend/cognito"
   publish                                 = false
   cloudwatch_logs_retention_in_days       = 7
   create_current_version_allowed_triggers = false

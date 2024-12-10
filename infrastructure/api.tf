@@ -1,29 +1,30 @@
 module "api_gateway" {
   source = "terraform-aws-modules/apigateway-v2/aws"
 
-  name                  = "test"
+  name                  = "table_tennis_store"
   create_domain_name    = false
   create_domain_records = false
 
   routes = {
-    "GET /" = {
+    "ANY /" = {
       integration = {
-        uri                  = module.users_lambda.lambda_function_arn
+        uri                  = module.api_lambda.lambda_function_arn
         timeout_milliseconds = 10000
       }
     }
   }
 }
 
-module "users_lambda" {
+module "api_lambda" {
   source = "terraform-aws-modules/lambda/aws"
 
-  function_name                     = "users"
-  handler                           = "app.users"
-  runtime                           = "python3.13"
-  source_path                       = "../backend"
-  publish                           = false
-  cloudwatch_logs_retention_in_days = 7
+  function_name                           = "table_tennis_store_api"
+  handler                                 = "app.users"
+  runtime                                 = "python3.13"
+  source_path                             = "../backend"
+  publish                                 = false
+  cloudwatch_logs_retention_in_days       = 7
+  create_current_version_allowed_triggers = false
 
   allowed_triggers = {
     AllowExecutionFromAPIGateway = {

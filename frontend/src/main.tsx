@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router";
 import { Amplify } from "aws-amplify";
 import App from "@/App";
 import { cognitoConfig } from "@/utils/env";
+import { AuthProvider } from "@/contexts/auth";
 
 Amplify.configure({
   Auth: { Cognito: cognitoConfig },
@@ -12,8 +13,10 @@ Amplify.configure({
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </AuthProvider>
   </StrictMode>
 );

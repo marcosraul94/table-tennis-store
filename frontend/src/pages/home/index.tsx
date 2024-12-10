@@ -1,36 +1,21 @@
-import { useEffect } from "react";
-import { signUp, getCurrentUser, signIn } from "aws-amplify/auth";
+import { useContext } from "react";
+import { AuthContext } from "@/contexts/auth";
+import { Link } from "react-router";
 
 const Page = () => {
-  useEffect(() => {
-    const printUser = async () => {
-      const { userId, username } = await getCurrentUser();
-
-      console.log("is cached?", { userId, username });
-    };
-
-    printUser();
-  });
-
-  const handleSignUpClick = async () => {
-    const auth = {
-      username: "marcosraul94@gmail.com",
-      password: "Hunter2dfgchvbjnkm!@#$%^",
-    };
-
-    const { isSignUpComplete, userId } = await signUp(auth);
-    console.log({ isSignUpComplete, userId });
-
-    const { isSignedIn } = await signIn(auth);
-    console.log({ isSignedIn });
-  };
+  const { email } = useContext(AuthContext);
 
   return (
     <div>
-      Home
-      <div>
-        <button onClick={handleSignUpClick}> Sign up </button>
-      </div>
+      Hello {email ? email : ""}
+      <ul>
+        <li>
+          <Link to="/sign-in"> Sign In </Link>
+        </li>
+        <li>
+          <Link to="/sign-up"> Sign Up </Link>
+        </li>
+      </ul>
     </div>
   );
 };

@@ -28,6 +28,10 @@ jobs:
         working-directory: backend/api
         run: make install
 
+      - name: Run linting
+        working-directory: api
+        run: make lint
+
       - name: Run tests
         working-directory: api
         run: make test

@@ -25,7 +25,9 @@ class TestRouter(unittest.TestCase):
         mock_get.assert_called_once()
 
     def test_correct_path_but_wrong_method(self):
-        self.raw_event["requestContext"]["http"]["method"] = HttpMethod.PUT.value
+        self.raw_event["requestContext"]["http"][
+            "method"
+        ] = HttpMethod.PUT.value
         event = ApiGatewayEvent(self.raw_event)
         router = Router(event, self.Views)
         response = router.route()

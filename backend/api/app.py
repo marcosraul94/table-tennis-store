@@ -5,7 +5,7 @@ from src.utils.response import ErrorResponse
 
 def lambda_handler(raw_event, context) -> dict:
     print(raw_event)
-    print('--------------')
+    print("--------------")
     print(context)
 
     event = ApiGatewayEvent(raw_event)

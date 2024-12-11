@@ -2,7 +2,7 @@ from src.utils.event import ApiGatewayEvent
 
 
 class View:
-    route = ''
+    route: str = ""
 
     def __init__(self, event: ApiGatewayEvent) -> None:
         self.event = event

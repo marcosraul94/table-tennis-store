@@ -24,7 +24,10 @@ class Router:
     @property
     def __unsupported_method_response(self) -> ErrorResponse:
         return ErrorResponse(
-            error=f"Unsupported http method {self.__event.http_method.value} from route {self.__event.route}!",
+            error=f"""
+            Unsupported http method {self.__event.http_method.value}
+            from route {self.__event.route}!
+            """,
             status=HttpStatus.NOT_FOUND,
         )
 

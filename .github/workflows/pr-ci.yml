@@ -35,3 +35,31 @@ jobs:
       - name: Run tests
         working-directory: backend/api
         run: make test
+
+  test-fe:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout commit
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 23
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm i
+
+      - name: Run linting
+        working-directory: frontend
+        run: npm run lint
+
+      - name: Run tests
+        working-directory: frontend
+        run: npm test
+
+      - name: Run build
+        working-directory: frontend
+        run: npm run build

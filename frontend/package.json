@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint . --fix",
-    "test": "jest"
+    "test": "NODE_OPTIONS='--disable-warning=ExperimentalWarning' jest"
   },
   "dependencies": {
     "aws-amplify": "^6.10.2",

@@ -6,7 +6,7 @@ const Page = () => {
   const { email, signOut } = useContext(AuthContext);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:2999/unprotected/product");
+    fetch("http://localhost:8080/");
   }, []);
 
   return (

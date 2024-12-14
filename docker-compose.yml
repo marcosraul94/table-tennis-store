@@ -1,25 +1,31 @@
 version: "3.8"
 services:
   frontend:
-    container_name: frontend
+    container_name: store-ui
     build: ./frontend
     command: npm run dev
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=local
     volumes:
       - ./frontend:/app
     ports:
       - 3000:3000
-      - 2999:2999
-  dynamodb-local:
+
+  api:
+    container_name: store-api
+    command: gunicorn --bind :8080 --workers 1 --reload app:app 
+    build: ./backend
+    environment:
+      - ENV=local
+      - PYTHONUNBUFFERED=TRUE
+    volumes:
+      - ./backend:/var/task
+    ports:
+      - 8080:8080
+
+  dynamodb:
+    container_name: store-db
     command: "-jar DynamoDBLocal.jar -sharedDb -inMemory"
     image: "amazon/dynamodb-local:latest"
-    container_name: dynamodb-local
     ports:
       - "8000:8000"
-    networks:
-      - sam_local
-
-networks:
-  sam_local:
-    name: sam_local

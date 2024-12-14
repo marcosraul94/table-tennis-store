@@ -9,3 +9,6 @@ lint:
 
 test:
 	python -m unittest
+
+start:
+	sam local start-api --port 2999

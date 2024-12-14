@@ -9,6 +9,13 @@ import { AuthProvider } from "@/contexts/auth";
 
 Amplify.configure({
   Auth: { Cognito: cognitoConfig },
+  API: {
+    REST: {
+      api: {
+        endpoint: "http://127.0.0.1:2999/",
+      },
+    },
+  },
 });
 
 createRoot(document.getElementById("root")!).render(

@@ -13,21 +13,30 @@ class Response:
         self.body = body
         self.headers = {
             "Content-Type": "application/json",
-            **(headers or {}),
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers": "*",
+            "Access-Control-Allow-Methods": "GET,POST,DELETE,PATCH",
+            ** (headers or {}),
         }
 
-    def to_json(self):
+    def to_dict(self) -> dict:
         return {
             "statusCode": self.status.value,
-            "body": json.dumps(self.body),
+            "body": self.body,
             "headers": self.headers,
+        }
+
+    def serialize(self) -> dict:
+        return {
+            **self.to_dict(),
+            "body": json.dumps(self.body),
         }
 
 
 class ErrorResponse(Response):
     def __init__(
         self,
-        error: str,
+        error: Exception,
         status: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR,
         headers: dict = None,
     ) -> None:

@@ -1,9 +1,13 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "@/contexts/auth";
 import { Link } from "react-router";
 
 const Page = () => {
   const { email, signOut } = useContext(AuthContext);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:2999/unprotected/product");
+  }, []);
 
   return (
     <div>

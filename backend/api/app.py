@@ -1,18 +1,24 @@
+from src.utils.view import View
+from src.views.user import UserView
+from src.views.product import ProductView
 from src.utils.router import Router
 from src.utils.event import ApiGatewayEvent
-from src.utils.response import ErrorResponse
 
 
-def lambda_handler(raw_event, context) -> dict:
-    print(raw_event)
-    print("--------------")
-    print(context)
+def lambda_handler(raw_event, context, views: list[View]) -> dict:
+    import json
+
+    print(json.dumps(raw_event, sort_keys=True, indent=4))
 
     event = ApiGatewayEvent(raw_event)
+    response = Router(event, views).route()
 
-    try:
-        response = Router(event).route()
-    except Exception as err:
-        response = ErrorResponse(err)
+    return response.serialize()
 
-    return response.to_json()
+
+def protected_routes_handler(raw_event, context) -> dict:
+    return lambda_handler(raw_event, context, [UserView])
+
+
+def unprotected_routes_handler(raw_event, context) -> dict:
+    return lambda_handler(raw_event, context, [ProductView])

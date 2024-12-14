@@ -1,16 +1,11 @@
 from src.utils.view import View
-from src.views.user import UserView
 from src.utils.enum import HttpStatus
 from src.utils.event import ApiGatewayEvent
 from src.utils.response import Response, ErrorResponse
 
-Views = [UserView]
-
 
 class Router:
-    def __init__(
-        self, event: ApiGatewayEvent, Views: list[View] = Views
-    ) -> None:
+    def __init__(self, event: ApiGatewayEvent, Views: list[View]) -> None:
         self.__event = event
         self.__Views = Views
 
@@ -19,6 +14,7 @@ class Router:
         return ErrorResponse(
             error=f"Route {self.__event.route} not found!",
             status=HttpStatus.NOT_FOUND,
+            headers=self.__event.headers,
         )
 
     @property
@@ -29,6 +25,7 @@ class Router:
             from route {self.__event.route}!
             """,
             status=HttpStatus.NOT_FOUND,
+            headers=self.__event.headers,
         )
 
     def route(self) -> Response:
@@ -42,8 +39,20 @@ class Router:
                 try:
                     view_method = getattr(view, self.__event.http_method.value)
 
-                    return view_method()
+                    return Response(
+                        body=view_method(),
+                        status=HttpStatus.OK,
+                        headers=self.__event.headers,
+                    )
+
                 except NotImplementedError:
                     return self.__unsupported_method_response
+
+                except Exception as runtime_error:
+                    return ErrorResponse(
+                        error=str(runtime_error),
+                        status=HttpStatus.INTERNAL_SERVER_ERROR,
+                        headers=self.__event.headers,
+                    )
 
         return self.__unsupported_route_response

@@ -9,9 +9,10 @@ class HttpMethod(Enum):
     PUT = "put"
 
 
-class Stage(Enum):
+class ENV(Enum):
     LOCAL = "local"
-    CLOUD = "cloud"
+    DEV = "dev"
+    PROD = "prod"
 
 
 class HttpStatus(Enum):

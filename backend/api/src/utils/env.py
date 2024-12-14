@@ -1,4 +1,4 @@
 import os
-from src.utils.enum import Stage
+from src.utils.enum import ENV
 
-stage = Stage(os.environ.get("STAGE", Stage.CLOUD))
+env = ENV(os.environ.get("ENV", ENV.LOCAL))

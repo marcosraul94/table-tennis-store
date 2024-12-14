@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 
 Globals:
@@ -7,16 +7,34 @@ Globals:
     CodeUri: .
     Environment:
       Variables:
-        STAGE: local
+        ENV: local
 
 Resources:
-  Users:
+  ProtectedRoutesLambda:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: app.lambda_handler
+      Handler: app.protected_routes_handler
       Events:
         ApiGatewayEvent:
           Type: Api
           Properties:
-            Path: /users
-            Method: GET
+            Path: /protected/{proxy+}
+            Method: ANY
+
+  UnprotectedRoutesLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.unprotected_routes_handler
+      Events:
+        ApiGatewayEvent:
+          Type: Api
+          Properties:
+            Path: /unprotected/{proxy+}
+            Method: ANY
+            Auth:
+              Authorizer: NONE
+            Cors:
+              AllowMethods: "'GET,POST,DELETE,PATCH'"
+              AllowHeaders: "'*'"
+              AllowOrigin: "'*'"
+              AllowCredentials: "'*'"

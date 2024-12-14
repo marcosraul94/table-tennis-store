@@ -10,6 +10,7 @@ services:
       - ./frontend:/app
     ports:
       - 3000:3000
+      - 2999:2999
   db:
     command: "-jar DynamoDBLocal.jar -sharedDb -inMemory"
     image: "amazon/dynamodb-local:latest"

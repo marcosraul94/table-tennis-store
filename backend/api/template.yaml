@@ -11,6 +11,16 @@ Globals:
         ENV: local
 
 Resources:
+  MyApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Auth:
+        DefaultAuthorizer: MyLambdaTokenAuthorizer
+        Authorizers:
+          MyLambdaTokenAuthorizer:
+            FunctionArn: !GetAtt LambdaAuthorizer.Arn
+
   ProtectedRoutesLambda:
     Type: AWS::Serverless::Function
     Properties:
@@ -19,8 +29,14 @@ Resources:
         ApiGatewayEvent:
           Type: Api
           Properties:
+            RestApiId: !Ref MyApi
             Path: /protected/{proxy+}
             Method: ANY
+            Cors:
+              AllowMethods: "'GET,POST,DELETE,PATCH'"
+              AllowHeaders: "'*'"
+              AllowOrigin: "'*'"
+              AllowCredentials: "'*'"
 
   UnprotectedRoutesLambda:
     Type: AWS::Serverless::Function
@@ -44,4 +60,8 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: src.utils.migration.lambda_handler
-      
+  
+  LambdaAuthorizer:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src.utils.authorizer.lambda_handler

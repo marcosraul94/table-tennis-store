@@ -5,6 +5,7 @@ Globals:
   Function:
     Runtime: python3.13
     CodeUri: .
+    Timeout: 30
     Environment:
       Variables:
         ENV: local
@@ -38,3 +39,9 @@ Resources:
               AllowHeaders: "'*'"
               AllowOrigin: "'*'"
               AllowCredentials: "'*'"
+  
+  MigrationTool:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src.utils.migration.lambda_handler
+      

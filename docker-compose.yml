@@ -1,19 +1,25 @@
 version: "3.8"
-services: 
+services:
   frontend:
     container_name: frontend
     build: ./frontend
     command: npm run dev
     environment:
-      - NODE_ENV=development 
+      - NODE_ENV=development
     volumes:
       - ./frontend:/app
     ports:
       - 3000:3000
       - 2999:2999
-  db:
+  dynamodb-local:
     command: "-jar DynamoDBLocal.jar -sharedDb -inMemory"
     image: "amazon/dynamodb-local:latest"
-    container_name: dyanmodb
+    container_name: dynamodb-local
     ports:
       - "8000:8000"
+    networks:
+      - sam_local
+
+networks:
+  sam_local:
+    name: sam_local

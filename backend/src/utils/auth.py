@@ -1,4 +1,5 @@
 import jwt
+import argon2
 from src.utils.date import now
 from src.utils.env import jwt_secret_key
 from src.utils.constant import jwt_algorithm
@@ -24,3 +25,13 @@ class JWT:
         claims = jwt.decode(token, jwt_secret_key, algorithms=[jwt_algorithm])
 
         return claims["email"]
+
+
+class Password:
+    @staticmethod
+    def hash(plain_text_password: str) -> str:
+        return argon2.PasswordHasher().hash(plain_text_password)
+
+    @staticmethod
+    def verify(plain_text_password: str, hashed_password: str) -> None:
+        argon2.PasswordHasher().verify(hashed_password, plain_text_password)

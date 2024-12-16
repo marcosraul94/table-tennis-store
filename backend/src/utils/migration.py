@@ -34,7 +34,7 @@ class MigrationTool:
             return []
 
         response = self.__table.query(
-            KeyConditionExpression=Key("pk").eq("MIGRATION#")
+            KeyConditionExpression=Key("pk").eq("Migration#")
         )
 
         return {item["name"] for item in response.get("Items", [])}
@@ -66,9 +66,9 @@ class MigrationTool:
         print(f"Saving {migration_name}...")
         self.__table.put_item(
             Item={
-                "pk": "MIGRATION#",
+                "pk": "Migration#",
                 "sk": migration_name,
-                "type": "MIGRATION",
+                "type": "Migration",
                 "name": migration_name,
             }
         )

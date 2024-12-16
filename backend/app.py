@@ -10,5 +10,6 @@ CORS(app)
 @app.route("/sign-up", methods=[HttpMethod.POST.value])
 def sign_up():
     payload = request.get_json()
+    response = SignUpView.post(payload["email"], payload["password"])
 
-    return SignUpView.post(payload["email"], payload["password"])
+    return response.to_json_response()

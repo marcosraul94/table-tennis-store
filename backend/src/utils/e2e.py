@@ -7,8 +7,10 @@ class E2ETestCase(TestCase):
         table = Repository().table
 
         response = table.scan()
-        items = response["Items"]
+        items_to_delete = [
+            item for item in response["Items"] if item["type"] != "Migration"
+        ]
 
         with table.batch_writer() as batch:
-            for item in items:
+            for item in items_to_delete:
                 batch.delete_item(Key={"pk": item["pk"], "sk": item["sk"]})

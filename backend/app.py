@@ -1,13 +1,14 @@
-from flask import Flask, jsonify
+from flask import Flask, request
 from flask_cors import CORS
 from src.utils.enum import HttpMethod
+from src.views.sign_up import SignUpView
 
 app = Flask(__name__)
 CORS(app)
 
 
 @app.route("/sign-up", methods=[HttpMethod.POST.value])
-def hello():
-    print("hello!")
+def sign_up():
+    payload = request.get_json()
 
-    return jsonify(status=200, message="hello world")
+    return SignUpView.post(payload["email"], payload["password"])

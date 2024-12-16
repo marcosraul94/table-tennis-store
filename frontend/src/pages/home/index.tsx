@@ -6,7 +6,11 @@ const Page = () => {
   const { email, signOut } = useContext(AuthContext);
 
   useEffect(() => {
-    fetch("http://localhost:8080/");
+    fetch("http://localhost:8080/sign-up", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }, []);
 
   return (

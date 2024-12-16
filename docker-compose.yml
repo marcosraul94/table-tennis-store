@@ -23,7 +23,7 @@ services:
     volumes:
       - ./backend:/var/task
     ports:
-      - 8080:8080
+      - 8082:8080
 
   dynamodb:
     container_name: store-db

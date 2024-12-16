@@ -145,6 +145,7 @@ class TestUserSerialization(unittest.TestCase):
         user_obj = User(
             id="id",
             email="hello@email.com",
+            encrypted_password="encrypted_password",
             created_at=datetime(year=2024, month=12, day=15),
         )
         expected_item_dict = {
@@ -152,6 +153,7 @@ class TestUserSerialization(unittest.TestCase):
             "sk": "User#hello@email.com",
             "type": "User",
             "id": "id",
+            "encrypted_password": "encrypted_password",
             "email": "hello@email.com",
             "created_at": "2024-12-15T00:00:00",
         }
@@ -167,12 +169,14 @@ class TestUserSerialization(unittest.TestCase):
             "sk": "User#hello@email.com",
             "type": "User",
             "id": "id",
+            "encrypted_password": "encrypted_password",
             "email": "hello@email.com",
             "created_at": "2024-12-15T00:00:00",
         }
         expected_user_obj = User(
             id="id",
             email="hello@email.com",
+            encrypted_password="encrypted_password",
             created_at=datetime(year=2024, month=12, day=15),
         )
 

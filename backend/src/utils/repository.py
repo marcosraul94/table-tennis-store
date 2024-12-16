@@ -15,10 +15,16 @@ class Repository:
     ) -> None:
         self.__client = client
         self.__table_name = table_name
+        self.__table = None
 
     @property
     def table(self):
-        return self.__client.Table(self.__table_name)
+        if self.__table:
+            return self.__table
+
+        self.__table = self.__client.Table(self.__table_name)
+
+        return self.__table
 
     def create(self, entities: list[Entity]) -> list[dict]:
         created_items = []

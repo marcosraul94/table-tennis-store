@@ -13,11 +13,13 @@ services:
 
   api:
     container_name: store-api
-    command: gunicorn --bind :8080 --workers 1 --reload app:app 
+    command: gunicorn --bind :8080 --workers 1 --reload app:app
     build: ./backend
     environment:
       - ENV=local
       - PYTHONUNBUFFERED=TRUE
+      - AWS_ACCESS_KEY_ID=None
+      - AWS_SECRET_ACCESS_KEY=None
     volumes:
       - ./backend:/var/task
     ports:
@@ -28,4 +30,4 @@ services:
     command: "-jar DynamoDBLocal.jar -sharedDb -inMemory"
     image: "amazon/dynamodb-local:latest"
     ports:
-      - "8000:8000"
+      - 8000:8000

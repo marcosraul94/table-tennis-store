@@ -11,7 +11,7 @@ class Entity:
         created_at: Optional[datetime] = None,
     ):
         self.email = email
-        self.id = id if id else uuid.uuid4()
+        self.id = id if id else str(uuid.uuid4())
         self.created_at = created_at if created_at else datetime.now(UTC)
 
     def to_dict(self) -> dict:

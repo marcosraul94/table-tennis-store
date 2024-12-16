@@ -2,11 +2,13 @@ import unittest
 from decimal import Decimal
 from datetime import datetime
 from src.utils.entity import Entity
+from src.entities.user import User
 from src.utils.serialization import (
     DatetimeSerialization,
     DecimalSerialization,
     DictSerialization,
     EntitySerialization,
+    UserSerialization,
 )
 
 
@@ -135,6 +137,48 @@ class TestEntitySerialization(unittest.TestCase):
         self.assertEqual(
             EntitySerialization.to_entity(item_dict),
             expected_entity_obj,
+        )
+
+
+class TestUserSerialization(unittest.TestCase):
+    def test_to_item(self):
+        user_obj = User(
+            id="id",
+            email="hello@email.com",
+            created_at=datetime(year=2024, month=12, day=15),
+        )
+        expected_item_dict = {
+            "pk": "User#hello@email.com",
+            "sk": "User#hello@email.com",
+            "type": "User",
+            "id": "id",
+            "email": "hello@email.com",
+            "created_at": "2024-12-15T00:00:00",
+        }
+
+        self.assertEqual(
+            UserSerialization.to_item(user_obj),
+            expected_item_dict,
+        )
+
+    def test_to_entity(self):
+        item_dict = {
+            "pk": "User#hello@email.com",
+            "sk": "User#hello@email.com",
+            "type": "User",
+            "id": "id",
+            "email": "hello@email.com",
+            "created_at": "2024-12-15T00:00:00",
+        }
+        expected_user_obj = User(
+            id="id",
+            email="hello@email.com",
+            created_at=datetime(year=2024, month=12, day=15),
+        )
+
+        self.assertEqual(
+            UserSerialization.to_entity(item_dict),
+            expected_user_obj,
         )
 
 

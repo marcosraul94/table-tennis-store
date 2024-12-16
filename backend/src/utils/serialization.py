@@ -2,7 +2,7 @@ from enum import Enum
 from typing import Optional
 from decimal import Decimal
 from datetime import datetime, date
-from src.utils.enum import EntityType
+from src.entities.user import User
 from src.utils.entity import Entity
 
 
@@ -32,7 +32,7 @@ class EnumSerialization:
         return value.value
 
     @classmethod
-    def deserialize(cls, value: str, enumCls: Enum) -> EntityType:
+    def deserialize(cls, value: str, enumCls: Enum) -> Enum:
         return enumCls(value)
 
 
@@ -117,4 +117,4 @@ class EntitySerialization:
 
 
 class UserSerialization(EntitySerialization):
-    pass
+    EntityCls = User

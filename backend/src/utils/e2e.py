@@ -1,5 +1,4 @@
 from unittest import TestCase
-from boto3.dynamodb.conditions import Key
 from src.utils.repository import Repository
 
 

@@ -71,7 +71,7 @@ class EntitySerialization:
 
     @classmethod
     def create_type(cls) -> str:
-        return str(cls.EntityCls.__class__.__name__)
+        return cls.EntityCls.__name__
 
     @classmethod
     def create_pk(cls, email: str) -> str:
@@ -80,10 +80,6 @@ class EntitySerialization:
     @classmethod
     def create_sk(cls, email: str) -> str:
         return cls.create_pk(email)
-
-    @staticmethod
-    def create_id(item: dict) -> str:
-        return f"{item['pk']}-{item['sk']}"
 
     @classmethod
     def to_item(
@@ -114,7 +110,6 @@ class EntitySerialization:
             "created_at": DatetimeSerialization.deserialize(
                 kwargs["created_at"]
             ),
-            "id": cls.create_id(item),
             **other_values,
         }
 

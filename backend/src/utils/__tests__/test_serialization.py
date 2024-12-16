@@ -1,10 +1,12 @@
 import unittest
 from decimal import Decimal
 from datetime import datetime
+from src.utils.entity import Entity
 from src.utils.serialization import (
     DatetimeSerialization,
     DecimalSerialization,
     DictSerialization,
+    EntitySerialization,
 )
 
 
@@ -64,6 +66,75 @@ class TestDictSerialization(unittest.TestCase):
         self.assertDictEqual(
             DictSerialization.serialize(dict_obj),
             expected_dict_obj,
+        )
+
+
+class TestEntitySerialization(unittest.TestCase):
+    def test_create_type(self):
+        type_str = EntitySerialization.create_type()
+        expected_type_str = "Entity"
+
+        self.assertEqual(
+            type_str,
+            expected_type_str,
+        )
+
+    def test_create_pk(self):
+        pk_str = EntitySerialization.create_sk("hello@email.com")
+        expected_pk_str = "Entity#hello@email.com"
+
+        self.assertEqual(
+            pk_str,
+            expected_pk_str,
+        )
+
+    def test_create_sk(self):
+        sk_str = EntitySerialization.create_sk("hello@email.com")
+        expected_sk_str = "Entity#hello@email.com"
+
+        self.assertEqual(
+            sk_str,
+            expected_sk_str,
+        )
+
+    def test_to_item(self):
+        entity_obj = Entity(
+            id="id",
+            email="hello@email.com",
+            created_at=datetime(year=2024, month=12, day=15),
+        )
+        expected_item_dict = {
+            "pk": "Entity#hello@email.com",
+            "sk": "Entity#hello@email.com",
+            "type": "Entity",
+            "id": "id",
+            "email": "hello@email.com",
+            "created_at": "2024-12-15T00:00:00",
+        }
+
+        self.assertEqual(
+            EntitySerialization.to_item(entity_obj),
+            expected_item_dict,
+        )
+
+    def test_to_entity(self):
+        item_dict = {
+            "pk": "Entity#hello@email.com",
+            "sk": "Entity#hello@email.com",
+            "type": "Entity",
+            "id": "id",
+            "email": "hello@email.com",
+            "created_at": "2024-12-15T00:00:00",
+        }
+        expected_entity_obj = Entity(
+            id="id",
+            email="hello@email.com",
+            created_at=datetime(year=2024, month=12, day=15),
+        )
+
+        self.assertEqual(
+            EntitySerialization.to_entity(item_dict),
+            expected_entity_obj,
         )
 
 

@@ -1,5 +1,5 @@
-from typing import Union
 import src.utils.db as dynamodb
+from boto3.dynamodb.conditions import Key
 from src.utils.entity import Entity
 from src.utils.constant import dynamo_db_table_name
 from src.utils.serialization import EntitySerialization
@@ -20,28 +20,25 @@ class Repository:
     def table(self):
         return self.__client.Table(self.__table_name)
 
-    @classmethod
-    def validate_item_found(cls, item: Union[dict, None]):
-        if not item:
-            raise Exception(f"{cls.entity.__class__.__name__} item not found!")
+    def create(self, entities: list[Entity]) -> list[dict]:
+        created_items = []
 
-    def create(self, entity: Entity) -> None:
-        self.create_all([entity])
-
-    def create_all(self, entities: list[Entity]) -> None:
         with self.table.batch_writer() as batch:
             for entity in entities:
                 item = self.EntitySerializationCls.to_item(entity)
 
                 batch.put_item(Item={**item})
+                created_items.append(item)
 
-    def find_one(self, email: str) -> Entity:
-        item = self.table.get_item(
-            Key={
-                "pk": self.create_pk(email),
-                "sk": self.create_sk(email),
-            }
-        )
-        self.validate_item_found(item)
+        return created_items
 
-        return self.EntitySerializationCls.to_entity(item)
+    def query_by_email(self, email: str) -> list[Entity]:
+        pk = Key("pk").eq(self.EntitySerializationCls.create_pk(email))
+        sk = Key("sk").eq(self.EntitySerializationCls.create_sk(email))
+
+        response = self.table.query(KeyConditionExpression=pk & sk)
+
+        return [
+            self.EntitySerializationCls.to_entity(item)
+            for item in response["Items"]
+        ]

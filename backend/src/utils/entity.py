@@ -1,21 +1,16 @@
+from typing import Optional
 from datetime import datetime, UTC
-from src.utils.enum import EntityType
 
 
 class Entity:
     def __init__(
-        self,
-        pk: str,
-        sk: str,
-        entity_type: EntityType,
-        created_at: datetime = None,
+        self, id: str, email: str, created_at: Optional[datetime] = None
     ):
-        self.pk = pk
-        self.sk = sk
-        self.entity_type = entity_type
+        self.id = id
+        self.email = email
         self.created_at = created_at if created_at else datetime.now(UTC)
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
             key: getattr(self, key)
             for key in dir(self)

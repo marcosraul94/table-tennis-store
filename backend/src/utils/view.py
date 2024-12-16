@@ -1,20 +1,16 @@
-from src.utils.event import ApiGatewayEvent
-
-
 class View:
-    route: str = ""
-
-    def __init__(self, event: ApiGatewayEvent) -> None:
-        self.event = event
-
-    def get(self) -> dict:
+    @staticmethod
+    def get() -> dict:
         raise NotImplementedError
 
-    def post(self) -> dict:
+    @staticmethod
+    def post() -> dict:
         raise NotImplementedError
 
-    def delete(self) -> dict:
+    @staticmethod
+    def delete() -> dict:
         raise NotImplementedError
 
-    def patch(self) -> dict:
+    @staticmethod
+    def patch() -> dict:
         raise NotImplementedError

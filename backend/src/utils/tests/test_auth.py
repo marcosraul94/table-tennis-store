@@ -1,5 +1,7 @@
 import unittest
-from src.utils.auth import JWT, Password
+from src.utils.app import create_app
+from src.utils.enum import HttpMethod, HttpStatus
+from src.utils.auth import JWT, Password, validate_protected_route
 
 
 class TestJWT(unittest.TestCase):
@@ -41,6 +43,59 @@ class TestPassword(unittest.TestCase):
     def test_verifying_incorrectly(self):
         with self.assertRaises(Exception):
             Password.verify("password", "wrong")
+
+
+class TestValidateProtectedRoute(unittest.TestCase):
+    def setUp(self):
+        self.route = "/protected"
+        self.app = create_app()
+
+        @self.app.route(self.route, methods=[HttpMethod.GET.value])
+        @validate_protected_route
+        def protected_route(email: str):
+            return {"email": email}
+
+    def test_protected_route_no_header(self):
+        with self.app.test_client() as client:
+            response = client.get(self.route)
+
+        self.assertEqual(response.status_code, HttpStatus.UNAUTHORIZED.value)
+        self.assertEqual(
+            response.get_json(), {"error": "Missing Authorization header"}
+        )
+
+    def test_protected_route_invalid_header(self):
+        with self.app.test_client() as client:
+            response = client.get(
+                self.route, headers={"Authorization": "InvalidToken"}
+            )
+
+        self.assertEqual(response.status_code, HttpStatus.UNAUTHORIZED.value)
+        self.assertEqual(
+            response.get_json(), {"error": "Invalid Authorization header"}
+        )
+
+    def test_protected_route_invalid_token(self):
+        with self.app.test_client() as client:
+            response = client.get(
+                self.route, headers={"Authorization": "Bearer something"}
+            )
+
+        self.assertEqual(response.status_code, HttpStatus.UNAUTHORIZED.value)
+        self.assertEqual(response.get_json(), {"error": "Invalid token"})
+
+    def test_protected_route_valid_token(self):
+        with self.app.test_client() as client:
+            email = "hello@email.com"
+            authorization = f"Bearer {JWT.create_token(email)}"
+
+            response = client.get(
+                self.route,
+                headers={"Authorization": authorization},
+            )
+
+        self.assertEqual(response.status_code, HttpStatus.OK.value)
+        self.assertEqual(response.get_json(), {"email": email})
 
 
 if __name__ == "__main__":

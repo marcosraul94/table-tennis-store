@@ -3,11 +3,10 @@ import argon2
 from flask import request
 from typing import Callable
 from functools import wraps
+from werkzeug.exceptions import Unauthorized
 from src.utils.date import now
-from src.utils.enum import HttpStatus
 from src.utils.env import jwt_secret_key
 from src.utils.constant import jwt_algorithm
-from src.utils.response import ErrorResponse
 from src.utils.serialization import DatetimeSerialization
 
 
@@ -35,7 +34,7 @@ class JWT:
 class Password:
     @staticmethod
     def __get_hasher():
-        return argon2.PasswordHasher(time_cost=1)
+        return argon2.PasswordHasher()
 
     @classmethod
     def hash(cls, plain_text_password: str) -> str:
@@ -53,28 +52,20 @@ def validate_protected_route(func: Callable):
     @wraps(func)
     def decorated_function(*args, **kwargs):
         auth_header = request.headers.get("Authorization")
+
         if not auth_header:
-            return ErrorResponse(
-                "Missing Authorization header",
-                status=HttpStatus.UNAUTHORIZED,
-            ).to_json_response()
+            raise Unauthorized("Missing Authorization header")
 
         scheme = "Bearer "
         if not auth_header.startswith(scheme):
-            return ErrorResponse(
-                "Invalid Authorization header",
-                status=HttpStatus.UNAUTHORIZED,
-            ).to_json_response()
+            raise Unauthorized("Invalid Authorization header")
 
         try:
             token = auth_header.split(scheme)[1]
-
-            return func(*args, email=JWT.extract_email(token), **kwargs)
-
+            email = JWT.extract_email(token)
         except Exception:
-            return ErrorResponse(
-                "Invalid token",
-                status=HttpStatus.UNAUTHORIZED,
-            ).to_json_response()
+            raise Unauthorized("Invalid token")
+
+        return func(*args, email=email, **kwargs)
 
     return decorated_function

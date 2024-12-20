@@ -14,7 +14,7 @@ class TestSignUpView(E2ETestCase):
         self.client.post("/sign-up", self.credentials)
 
     def test_login_after_creating_user(self):
-        response = self.client.post("/sign-in", self.credentials)
+        response = self.client.post(self.route, self.credentials)
 
         self.assertEqual(response["status"], HttpStatus.OK.value)
         self.assertIsNotNone(response["data"]["jwt"])

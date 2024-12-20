@@ -1,4 +1,4 @@
-from werkzeug.exceptions import UnprocessableEntity
+from werkzeug.exceptions import Unauthorized
 from src.utils.auth import JWT, Password
 from src.utils.view import View
 from src.entities.user import User
@@ -13,7 +13,7 @@ class SignUpView(View):
 
         users_with_same_email = usersRepo.query_by_email(email)
         if users_with_same_email:
-            raise UnprocessableEntity("Invalid email and password")
+            raise Unauthorized("Invalid email and password")
 
         user = User(email, Password.hash(password))
         usersRepo.create([user])

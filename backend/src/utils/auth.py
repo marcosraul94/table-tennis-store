@@ -48,9 +48,7 @@ class Password:
                 plain_text_password,
             )
         except Exception:
-            raise Unauthorized(
-                "Combination of email plus password does not exist"
-            )
+            raise Unauthorized("Invalid email and password")
 
 
 def validate_protected_route(func: Callable):

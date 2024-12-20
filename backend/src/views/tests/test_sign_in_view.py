@@ -18,7 +18,7 @@ class TestSignUpView(E2ETestCase):
         response = self.client.post("/sign-in", credentials)
 
         self.assertEqual(response["status"], HttpStatus.OK.value)
-        self.assertIsNotNone(response["jwt"])
+        self.assertIsNotNone(response["data"]["jwt"])
 
     def test_login_with_invalid_email(self):
         credentials = {

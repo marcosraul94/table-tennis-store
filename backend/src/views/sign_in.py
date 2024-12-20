@@ -11,7 +11,7 @@ class SignInView(View):
     def post(email: str, password: str):
         users = UserRepo().query_by_email(email)
         if not users:
-            raise Unauthorized("Does not exist user with those credentials")
+            raise Unauthorized("Invalid email and password")
 
         user: User = users[0]
         Password.verify(password, user.hashed_password)

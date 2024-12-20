@@ -40,7 +40,7 @@ def register_routes(app):
 
     @app.route("/sign-in", methods=[HttpMethod.POST.value])
     def sign_in():
-        payload = request.get_json()
+        payload = json.loads(request.json)
         response = SignInView.post(payload["email"], payload["password"])
 
         return response.to_json_response()

@@ -6,13 +6,9 @@ from src.utils.e2e import E2ETestCase
 
 
 class TestSignUpView(E2ETestCase):
-    def setUp(self):
-        super().setUp()
-        self.route = "/sign-up"
-
     def test_created_user(self):
         response = self.client.post(
-            self.route,
+            "/sign-up",
             {
                 "email": "hello@email.com",
                 "password": "plain text password",
@@ -36,10 +32,10 @@ class TestSignUpView(E2ETestCase):
             "password": "plain text password",
         }
 
-        response = self.client.post(self.route, credentials)
+        response = self.client.post("/sign-up", credentials)
         self.assertNotIn("error", response)
 
-        response = self.client.post(self.route, credentials)
+        response = self.client.post("/sign-up", credentials)
         self.assertEqual(response["error"], "Invalid email and password")
 
 

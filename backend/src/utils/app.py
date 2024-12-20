@@ -5,8 +5,10 @@ from flask import Flask, jsonify
 from werkzeug.exceptions import HTTPException
 from src.utils.enum import HttpMethod
 from src.utils.enum import HttpStatus
+from src.views.orders import OrdersView
 from src.views.sign_up import SignUpView
 from src.views.sign_in import SignInView
+from src.utils.auth import extract_email_from_jwt
 
 
 def create_app():
@@ -42,5 +44,12 @@ def register_routes(app):
     def sign_in():
         payload = json.loads(request.json)
         response = SignInView.post(payload["email"], payload["password"])
+
+        return response.to_json_response()
+
+    @app.route("/orders", methods=[HttpMethod.GET.value])
+    @extract_email_from_jwt
+    def orders(email: str):
+        response = OrdersView.get(email)
 
         return response.to_json_response()

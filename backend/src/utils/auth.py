@@ -51,7 +51,7 @@ class Password:
             raise Unauthorized("Invalid email and password")
 
 
-def validate_protected_route(func: Callable):
+def extract_email_from_jwt(func: Callable):
     @wraps(func)
     def decorated_function(*args, **kwargs):
         auth_header = request.headers.get("Authorization")

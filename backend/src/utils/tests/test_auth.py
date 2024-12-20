@@ -1,7 +1,7 @@
 import unittest
 from src.utils.app import create_app
 from src.utils.enum import HttpMethod, HttpStatus
-from src.utils.auth import JWT, Password, validate_protected_route
+from src.utils.auth import JWT, Password, extract_email_from_jwt
 
 
 class TestJWT(unittest.TestCase):
@@ -45,13 +45,13 @@ class TestPassword(unittest.TestCase):
             Password.verify("password", "wrong")
 
 
-class TestValidateProtectedRoute(unittest.TestCase):
+class TestExtractEmailFromJwt(unittest.TestCase):
     def setUp(self):
         self.route = "/protected"
         self.app = create_app()
 
         @self.app.route(self.route, methods=[HttpMethod.GET.value])
-        @validate_protected_route
+        @extract_email_from_jwt
         def protected_route(email: str):
             return {"email": email}
 

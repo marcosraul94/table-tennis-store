@@ -1,16 +1,19 @@
+from src.utils.response import Response
+
+
 class View:
     @staticmethod
-    def get() -> dict:
+    def get() -> Response:
         raise NotImplementedError
 
     @staticmethod
-    def post() -> dict:
+    def post() -> Response:
         raise NotImplementedError
 
     @staticmethod
-    def delete() -> dict:
+    def delete() -> Response:
         raise NotImplementedError
 
     @staticmethod
-    def patch() -> dict:
+    def patch() -> Response:
         raise NotImplementedError

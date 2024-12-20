@@ -7,26 +7,32 @@ class TestSignUpView(E2ETestCase):
     def setUp(self):
         super().setUp()
         self.route = "/sign-in"
-
-    def test_login_after_creating_user(self):
-        credentials = {
+        self.credentials = {
             "email": "hello@email.com",
             "password": "plain text password",
         }
+        self.client.post("/sign-up", self.credentials)
 
-        self.client.post("/sign-up", credentials)
-        response = self.client.post("/sign-in", credentials)
+    def test_login_after_creating_user(self):
+        response = self.client.post("/sign-in", self.credentials)
 
         self.assertEqual(response["status"], HttpStatus.OK.value)
         self.assertIsNotNone(response["data"]["jwt"])
 
     def test_login_with_invalid_email(self):
-        credentials = {
-            "email": "hello@email.com",
-            "password": "plain text password",
-        }
+        response = self.client.post(
+            self.route,
+            {**self.credentials, "email": "wrong"},
+        )
 
-        response = self.client.post(self.route, credentials)
+        self.assertEqual(response["error"], "Invalid email and password")
+
+    def test_login_with_invalid_password(self):
+        response = self.client.post(
+            self.route,
+            {**self.credentials, "password": "wrong"},
+        )
+
         self.assertEqual(response["error"], "Invalid email and password")
 
 

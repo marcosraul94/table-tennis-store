@@ -19,6 +19,7 @@ services:
     environment:
       - ENV=local
       - PYTHONUNBUFFERED=TRUE
+      - PYTHONWARNINGS=ignore::DeprecationWarning:boto3
       - AWS_ACCESS_KEY_ID=None
       - AWS_SECRET_ACCESS_KEY=None
       - JWT_SECRET_KEY=jwt_secret_key

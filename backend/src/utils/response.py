@@ -15,9 +15,4 @@ class Response:
     def to_json_response(self):
         serialized_data = DictSerialization.serialize(self.data)
 
-        return jsonify(status=self.status.value, data=serialized_data)
-
-
-class ErrorResponse(Response):
-    def __init__(self, error: str, status=HttpStatus.INTERNAL_SERVER_ERROR):
-        super().__init__({"error": error}, status)
+        return jsonify(status=self.status.value, data=serialized_data), 200

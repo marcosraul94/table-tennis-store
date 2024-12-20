@@ -42,10 +42,15 @@ class Password:
 
     @classmethod
     def verify(cls, plain_text_password: str, hashed_password: str) -> bool:
-        return cls.__get_hasher().verify(
-            hashed_password,
-            plain_text_password,
-        )
+        try:
+            return cls.__get_hasher().verify(
+                hashed_password,
+                plain_text_password,
+            )
+        except Exception:
+            raise Unauthorized(
+                "Combination of email plus password does not exist"
+            )
 
 
 def validate_protected_route(func: Callable):

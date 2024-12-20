@@ -1,27 +1,46 @@
 import unittest
+from datetime import datetime
 from src.utils.date import now
 from src.utils.enum import HttpStatus
 from src.utils.e2e import E2ETestCase
-from src.views.sign_up import SignUpView
 
 
 class TestSignUpView(E2ETestCase):
+    def setUp(self):
+        super().setUp()
+        self.route = "/sign-up"
+
     def test_created_user(self):
-        response = SignUpView.post(
-            email="hello@email.com",
-            password="plain text password",
+        response = self.client.post(
+            self.route,
+            {
+                "email": "hello@email.com",
+                "password": "plain text password",
+            },
         )
 
-        user = response.data["user"]
+        self.assertEqual(response["status"], HttpStatus.OK.value)
 
-        self.assertEqual(response.status, HttpStatus.OK)
+        user = response["data"]["user"]
         self.assertEqual(user["email"], "hello@email.com")
         self.assertIsNotNone(user["email"])
         self.assertEqual(
-            user["created_at"].date(),
+            datetime.fromisoformat(user["created_at"]).date(),
             now().date(),
         )
-        self.assertIsNotNone(response.data["jwt"])
+        self.assertIsNotNone(response["data"]["jwt"])
+
+    def test_create_same_user(self):
+        credentials = {
+            "email": "hello@email.com",
+            "password": "plain text password",
+        }
+
+        response = self.client.post(self.route, credentials)
+        self.assertNotIn("error", response)
+
+        response = self.client.post(self.route, credentials)
+        self.assertEqual(response["error"], "Invalid email and password")
 
 
 if __name__ == "__main__":

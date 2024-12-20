@@ -1,22 +1,20 @@
-from werkzeug.exceptions import UnprocessableEntity
-from src.utils.auth import JWT, Password
+from werkzeug.exceptions import Unauthorized
 from src.utils.view import View
 from src.entities.user import User
 from src.utils.response import Response
+from src.utils.auth import JWT, Password
 from src.repositories.user import UserRepo
 
 
-class SignUpView(View):
+class SignInView(View):
     @staticmethod
     def post(email: str, password: str):
-        usersRepo = UserRepo()
+        users = UserRepo().query_by_email(email)
+        if not users:
+            raise Unauthorized("Does not exist user with those credentials")
 
-        users_with_same_email = usersRepo.query_by_email(email)
-        if users_with_same_email:
-            raise UnprocessableEntity("Invalid email and password")
-
-        user = User(email, Password.hash(password))
-        usersRepo.create([user])
+        user: User = users[0]
+        Password.verify(password, user.hashed_password)
 
         return Response(
             data={
